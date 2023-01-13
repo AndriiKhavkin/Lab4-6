@@ -1,0 +1,139 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+/* #673ab7 */
+body {
+    background-color: #ebebeb;
+}
+
+.header {
+    width: 100%;
+    height: 80px;
+    background-color: #252525;
+    color: #ffffff;
+    padding: 5px 30px;
+    font-size: 25px;
+    font-weight: weight;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    height: 100%;
+    padding: 50px 0;
+}
+
+.start_block {
+    /* display: none; */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.start_input1,
+.start_input2{
+    padding: 5px;
+    margin: 20px 0;
+    width: 500px;
+    height: 40px;
+}
+
+.btn {
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: #cccccc;
+    color: #fff;
+    transition: background-color 0.2s linear, color 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) ;
+}
+
+.btn:hover {
+    background-color: #666666;
+    cursor: pointer;box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08),
+    0px 2px 2px rgba(0, 0, 0, 0.12);
+}
+
+.test_block {
+    /* display: flex; */
+    width: 100%;
+    margin-top: 50px;
+    /* display: none; */
+    flex-direction: column;
+    align-items: center;
+}
+
+.test_form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.test_item {
+    width: 60%;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 20px;
+    margin-bottom: 50px;
+}
+
+.test_title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.variantes {
+    display: flex;
+    flex-direction: column;
+}
+
+.variant {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.result_block {
+    /* display: none; */
+    flex-direction: column;
+    width: 100%;
+    padding: 20px 50px;
+    margin: 50px 0;
+    background-color: #fff;
+    border-radius: 20px;
+    font-style: bold;
+
+}
+
+.result_score1 {
+    margin: 20px 0;
+}
+
+.result_score2 {
+    margin-bottom: 20px;
+}
+
+.footer{
+    padding: 20px;
+    background:#252525;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: #adadad;
+}
+.container__footer{
+    padding: 10px;
+}
