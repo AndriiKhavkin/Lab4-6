@@ -1,176 +1,35 @@
-let startInputFio = document.getElementById('startInput1');
-let startInputGroup = document.getElementById('startInput2');
+import { testData } from "./test-data.js";
+import * as markupService from "./markup-service.js";
 
-let startBtn = document.getElementById('startBtn');
-let testBtn = document.getElementById('testBtn');
-let resultBtn = document.getElementById('endBtn');
+const questionsForTest = testData.prepareRandomQuestions();
 
-let startBlock = document.getElementsByClassName('start_block');
-let testBlock = document.getElementsByClassName('test_block');
-let resultBlock = document.getElementsByClassName('result_block')
+const startInput = document.getElementById("startInput");
 
-let testForm = document.getElementsByClassName('test_form');
+// let startInputFio = document.getElementById('startInput1');
+// let startInputGroup = document.getElementById('startInput2');
 
-let resultAnswers = [];
+const startBtn = document.getElementById('startBtn');
+const testBtn = document.getElementById('testBtn');
+const resultBtn = document.getElementById('endBtn');
+
+const startBlock = document.getElementsByClassName('start_block');
+const testBlock = document.getElementsByClassName('test_block');
+const resultBlock = document.getElementsByClassName('result_block')
+
+const testForm = document.getElementsByClassName('test_form');
+
+let student = {};
+let resultObj = {};
+
+const resultAnswers = [];
 
 function insertBefore(newNode, existingNode) {
     existingNode.parentNode.insertBefore(newNode, existingNode);
 }
 
-const arrayShuffle = (arr) => {
-
-    let currentIndex = arr.length, temporaryValue, randomIndex;
-
-    while(0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -=1;
-
-        temporaryValue = arr[currentIndex];
-        arr[currentIndex] = arr[randomIndex];
-        arr[randomIndex] = temporaryValue;
-    }
-
-    return arr;
-}
-
-let questionsArr = [
-    {
-        question: 'Який тег відповідає за властивості сторінки (мова, заголовок, ключові слова)?',
-        type: 'select',
-        answers: ['head', 'body', 'title', 'html'],
-        correctAnswers: ['head']
-    },
-    {
-        question: 'Чи є HTML мовою програмування?',
-        type: 'select',
-        answers: ['Так', 'Ні'],
-        correctAnswers: ['Ні']
-    },
-    {
-        question: 'Назвіть парні теги',
-        type: 'checkbox',
-        answers: ['br', 'p', 'b', 'u'],
-        correctAnswers: ['p', 'b', 'u']
-    },
-    {
-        question: 'Теги (H1) ... (H6) використовують для:',
-        type: 'radio',
-        answers: ['позначення заголовків різних рівнів', 'позначення нового абзацу', 'позначення заголовку таблиці', 'визначення вигляду заголовка вікна, в якому відображатиметься документ'],
-        correctAnswers: ['позначення заголовків різних рівнів']
-    },
-    {
-        question: 'За додавання списків відповідають теги:',
-        type: 'checkbox',
-        answers: ['ul', 'ol', 'a', 'li'],
-        correctAnswers: ['ul', 'ol', 'li']
-    },
-    {
-        question: "За вирівнювання тексту в абзаці відповідає атрибут:",
-        type: 'radio',
-        answers: ['align', 'valign', 'font', 'h1'],
-        correctAnswers: ['align']
-    },
-    {
-        question: 'Які бувають теги?',
-        type: 'select',
-        answers: ['одинарні', 'тільки парні', 'тільки непарні', 'парні, непарні'],
-        correctAnswers: ['парні, непарні']
-    },
-    {
-        question: "За колір фону сторінки відповідає атрибут:",
-        type: 'radio',
-        answers: ['bgcolor', 'color', 'font', 'body'],
-        correctAnswers: ['bgcolor']
-    },
-    {
-        question: 'За допомогою якого тега  можливо вставити малюнок? Напишіть свій варіант:',
-        type: 'input',
-        answers: [],
-        correctAnswers: ["'document.getElementById('img')"]
-    },
-    {
-        question: 'За допомогою якої властивості можна зробити відступи всередені комірки таблиці або іношо обєекта. Напишіть свій варіант:',
-        type: 'input',
-        answers: [],
-        correctAnswers: ["document.getElementById('padding')"]
-    },
-    {
-        question: 'Як зробити спливаючу підказку при наведенні на посилання?',
-        type: 'radio',
-        answers: ['(a title="Підсказка" href="#")Посилання(/a)', '(a caption="Підсказка" href="#")Посилання(/a)', '(a alt="Підсказка" href="#")Посилання(/a)', '(a caption="Підсказка"  )Посилання(/a)'],
-        correctAnswers: ['(a title="Підсказка" href="#")Посилання(/a)']
-    },
-];
-
-const createCheckboxElement = (question, answers) => {
-    return `
-        <div class="test_title">${question}</div>
-        <div class="variantes">
-            <div class="variant">
-                <input id="var1" name="${question}" value="${answers[0]}" type="checkbox" />
-                <label for="${question}">${answers[0]}</label>
-            </div>
-            <div class="variant">
-                <input id="var2" name="${question}" value="${answers[1]}" type="checkbox" />
-                <label for="${question}">${answers[1]}</label>
-            </div>
-            <div class="variant">
-                <input id="var3" name="${question}" value="${answers[2]}" type="checkbox" />
-                <label for="${question}">${answers[2]}</label>
-            </div>
-            <div class="variant">
-                <input id="var4" name="${question}" value="${answers[3]}" type="checkbox" />
-                <label for="${question}">${answers[3]}</label>
-            </div>
-        </div>`
-}
-
-const createSelectElement = (question, answers) => {
-    return `
-    <div class="test_title">${question}</div>
-        <select name="${question}">
-            <option value="${answers[0]}">${answers[0]}</option>
-            <option value="${answers[1]}">${answers[1]}</option>
-            <option value="${answers[2]}">${answers[2]}</option>
-            <option value="${answers[3]}">${answers[3]}</option>
-        </select>
-    </div>`
-}
-
-const createRadioElement = (question, answers) => {
-    return `
-        <div class="test_title">${question}</div>
-        <div class="variantes">
-            <div class="variant">
-                <input type="radio" id="contact1" name="${question}" value="${answers[0]}" />
-                <label for="${question}">${answers[0]}</label>
-            </div>
-            <div class="variant">
-                <input type="radio" id="contact2" name="${question}" value="${answers[1]}" />
-                <label for="${question}">${answers[1]}</label>
-            </div>
-            <div class="variant">
-                <input type="radio" id="contact3" name="${question}" value="${answers[2]}" />
-                <label for="${question}">${answers[2]}</label>
-            </div>
-            <div class="variant">
-                <input type="radio" id="contact4" name="${question}" value="${answers[3]}" />
-                <label for="${question}">${answers[3]}</label>
-            </div>
-        </div>`
-}
-
-const createInputElement = (question) => {
-    return `
-        <div class="test_title">${question}</div>
-        <input type="text" placeholder="Answer..." name="${question}" required />
-    `
-}
-
 const createTestBlock = (arr) => {
     let questionNum = 1;
-    return arr.map(el => {
-        let shuffledAnswers = arrayShuffle(el.answers);
+    return arr.map((el) => {
         const child = document.createElement('form');
         child.className = 'test_item';
         child.id = questionNum;
@@ -190,31 +49,29 @@ const createTestBlock = (arr) => {
                 break;
         }
 
-        insertBefore(child, testForm[0].firstElementChild)
+        insertBefore(child, testForm[0].firstElementChild);
         questionNum++;
-    })
-}
+    });
+};
 
-class User{
+// class User{
 
-    constructor(FirstName, SecondName){
-        this.FirstName = FirstName;
-        this.SecondName = SecondName
-    }   
+//     constructor(FirstName, SecondName){
+//         this.FirstName = FirstName;
+//         this.SecondName = SecondName
+//     }   
 
-}
+// }
 
-class Student{
-
-
-    constructor(Group, Speciality){
-        this.Group = Group;
-        this.Speciality = Speciality
-    }   
+// class Student{
 
 
+//     constructor(Group, Speciality){
+//         this.Group = Group;
+//         this.Speciality = Speciality
+//     }   
 
-}
+// }
 
 startBtn.addEventListener('click', (e) => {
     // e.preventDefault()
@@ -244,8 +101,8 @@ startBtn.addEventListener('click', (e) => {
     
     student = {
         group: arr[0],
-        surname: arr[1],
-        name: arr[2]
+        surname: arr[1] || "",
+        name: arr[2] || "",
     }
 
     createTestBlock(questionsArr);
@@ -255,12 +112,11 @@ startBtn.addEventListener('click', (e) => {
 });
 
 
+let results = [];
+let points = 0;
 
 testBtn.addEventListener('click', (e) => {
     e.preventDefault();
-
-    let results = [];
-    let points = 0;
 
     questionsArr.map((el, index) => {
         let form = document.getElementById(`${index + 1}`);
@@ -268,7 +124,7 @@ testBtn.addEventListener('click', (e) => {
 
         results.push({
             question: el.question,
-            answers: []
+            answers: [],
         })
 
         for(let [question, answer] of formData) {
@@ -278,9 +134,11 @@ testBtn.addEventListener('click', (e) => {
 
 
     for(let i = 0; i < results.length; i++) {
-        let correctSort = questionsArr[i].correctAnswers.sort();
+        let correctSort = questionsForTest[i].correctAnswers.sort();
         let resSort = results[i].answers.sort();
-
+        console.log(i)
+        console.log(correctSort)
+        console.log(resSort)
         if(JSON.stringify(correctSort) === JSON.stringify(resSort))
             points += 1;
     }
@@ -297,11 +155,14 @@ testBtn.addEventListener('click', (e) => {
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
-
+    xhr.setRequestHeader("score", resultObj.points);
+    xhr.setRequestHeader(
+      "author",
+      `${encodeURIComponent(resultObj.group)} ${encodeURIComponent(
+        resultObj.surname
+      )} ${encodeURIComponent(resultObj.name)}`
+    );  
     console.dir(xhr);
-    console.log(resultObj);
-    xhr.setRequestHeader('score', resultObj.points);
-    xhr.setRequestHeader('author', `${resultObj.group} ${resultObj.surname} ${resultObj.name}`);
     xhr.send();
 
 
